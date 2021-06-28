@@ -20,13 +20,17 @@ Example::
   tagging.f1.grad_error = 0.1. 0.1 0.1
 
   tagging.g1.type = GeometryRefinement
-  tagging.g1.shapes = c1 b1
+  tagging.g1.shapes = c1 b1 sp1
 
   tagging.g1.c1.type = cylinder
   tagging.g1.c1.start = 500.0 500.0 250.0
   tagging.g1.c1.end = 500.0 500.0 750.0
   tagging.g1.c1.outer_radius = 300.0
   tagging.g1.c1.inner_radius = 275.0
+
+  tagging.g1.sp1.type = sphere
+  tagging.g1.sp1.center = 500.0 500.0 250.0
+  tagging.g1.sp1.radius = 300.0
 
   tagging.g1.b1.type = box
   tagging.g1.b1.origin = 300.0 150.0 250.0
@@ -106,7 +110,8 @@ Refinement using geometry
 
 This section controls refinement using pre-defined geometric shapes. Currently,
 two options are supported: 1. ``box`` -- refines the region inside a hexahedral
-block, and 2. ``cylinder`` -- refines the region inside a cylindrical block.
+block, 2. ``cylinder`` -- refines the region inside a cylindrical block,
+and 3. ``sphere`` -- refines the region inside a sphere block.
 
 .. input_param:: tagging.GeometryRefinement.shapes
 
