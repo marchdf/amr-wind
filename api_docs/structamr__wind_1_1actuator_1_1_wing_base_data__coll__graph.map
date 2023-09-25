@@ -1,0 +1,11 @@
+<map id="amr_wind::actuator::WingBaseData" name="amr_wind::actuator::WingBaseData">
+<area shape="rect" id="node1" title="Base data representation of a fixed&#45;wing." alt="" coords="1177,141,1325,183"/>
+<area shape="rect" id="node2" href="$structamr__wind_1_1actuator_1_1_component_view.html" title="Slice of actutator data for components (tower, blade, etc)" alt="" coords="836,80,984,121"/>
+<area shape="rect" id="node3" href="$structamr__wind_1_1utils_1_1_slice.html" title=" " alt="" coords="438,5,599,47"/>
+<area shape="rect" id="node4" href="$structamr__wind_1_1utils_1_1_slice.html" title=" " alt="" coords="5,78,204,105"/>
+<area shape="rect" id="node5" href="$structamr__wind_1_1utils_1_1_slice.html" title=" " alt="" coords="424,71,613,112"/>
+<area shape="rect" id="node6" href="$structamr__wind_1_1utils_1_1_slice.html" title=" " alt="" coords="425,156,613,197"/>
+<area shape="rect" id="node7" title=" " alt="" coords="807,173,1013,215"/>
+<area shape="rect" id="node8" title=" " alt="" coords="440,237,597,263"/>
+<area shape="rect" id="node9" title=" " alt="" coords="85,237,124,263"/>
+</map>

@@ -1,0 +1,29 @@
+<map id="DTUSpinnerSampler.H" name="DTUSpinnerSampler.H">
+<area shape="rect" id="node1" title=" " alt="" coords="1029,5,1195,32"/>
+<area shape="rect" id="node2" href="$_lidar_sampler_8_h.html" title=" " alt="" coords="952,80,1141,121"/>
+<area shape="rect" id="node16" href="$vector__space_8_h.html" title=" " alt="" coords="1089,169,1269,211"/>
+<area shape="rect" id="node3" href="$_line_sampler_8_h.html" title=" " alt="" coords="740,169,924,211"/>
+<area shape="rect" id="node4" href="$_sampler_base_8_h.html" title=" " alt="" coords="597,259,787,300"/>
+<area shape="rect" id="node5" href="$_factory_8_h.html" title=" " alt="" coords="603,355,781,382"/>
+<area shape="rect" id="node11" href="$nc__interface_8_h.html" title="Interface to NetCDF library." alt="" coords="187,348,354,389"/>
+<area shape="rect" id="node6" title=" " alt="" coords="551,445,628,471"/>
+<area shape="rect" id="node7" title=" " alt="" coords="402,445,526,471"/>
+<area shape="rect" id="node8" title=" " alt="" coords="652,445,732,471"/>
+<area shape="rect" id="node9" title=" " alt="" coords="756,445,876,471"/>
+<area shape="rect" id="node10" title=" " alt="" coords="900,445,983,471"/>
+<area shape="rect" id="node12" title=" " alt="" coords="5,445,64,471"/>
+<area shape="rect" id="node13" title=" " alt="" coords="89,445,151,471"/>
+<area shape="rect" id="node14" title=" " alt="" coords="176,445,251,471"/>
+<area shape="rect" id="node15" title=" " alt="" coords="275,445,378,471"/>
+<area shape="rect" id="node17" href="$vector_8_h.html" title=" " alt="" coords="1082,355,1275,382"/>
+<area shape="rect" id="node25" href="$tensor_8_h.html" title=" " alt="" coords="1302,266,1495,293"/>
+<area shape="rect" id="node18" title=" " alt="" coords="1341,527,1457,553"/>
+<area shape="rect" id="node19" href="$vstraits_8_h.html" title=" " alt="" coords="1492,445,1695,471"/>
+<area shape="rect" id="node22" href="$vector_i_8_h.html" title=" " alt="" coords="1006,445,1205,471"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1628,527,1687,553"/>
+<area shape="rect" id="node21" title=" " alt="" coords="1481,527,1604,553"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1067,527,1143,553"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1254,527,1317,553"/>
+<area shape="rect" id="node26" href="$tensor_i_8_h.html" title=" " alt="" coords="1299,355,1498,382"/>
+<area shape="rect" id="node27" href="$trig__ops_8_h.html" title="Trigonometric utilities." alt="" coords="1330,437,1467,479"/>
+</map>
