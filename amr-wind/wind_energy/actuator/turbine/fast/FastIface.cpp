@@ -130,7 +130,7 @@ void FastIface::init_solution(const int local_id)
     AMREX_ALWAYS_ASSERT(m_is_initialized);
 
     auto& fi = *m_turbine_data[local_id];
-    fast_func(FAST_OpFM_Solution0, &fi.tid_local);
+    fast_func(FAST_CFD_Solution0, &fi.tid_local);
     fi.is_solution0 = false;
 }
 
@@ -157,7 +157,7 @@ void FastIface::advance_turbine(const int local_id)
 
     write_velocity_data(fi);
     for (int i = 0; i < fi.num_substeps; ++i, ++fi.time_index) {
-        fast_func(FAST_OpFM_Step, &fi.tid_local);
+        fast_func(FAST_CFD_Step, &fi.tid_local);
     }
 
     if (fi.chkpt_interval > 0 &&
@@ -207,20 +207,25 @@ void FastIface::fast_init_turbine(FastTurbine& fi)
     int abort_lev;
     char inp_file[fast_strlen()];
     copy_filename(fi.input_file, inp_file);
+    char out_file[fast_strlen()];
 
 #ifdef AMR_WIND_FAST_USE_SCDX
     fast_func(
-        FAST_OpFM_Init, &fi.tid_local, &fi.stop_time, inp_file, &fi.tid_global,
-        &m_num_sc_inputs_glob, &m_num_sc_inputs, &m_num_sc_outputs,
-        &m_init_sc_inputs_glob, &m_init_sc_inputs_turbine, &fi.num_pts_blade,
-        &fi.num_pts_tower, fi.base_pos, &abort_lev, &fi.dt_fast, &fi.num_blades,
-        &fi.num_blade_elem, &fi.to_cfd, &fi.from_cfd, &fi.to_sc, &fi.from_sc);
+        FAST_ExtInfw_Init, &fi.tid_local, &fi.stop_time, inp_file,
+        &fi.tid_global, out_file, &m_num_sc_inputs_glob, &m_num_sc_inputs,
+        &m_num_sc_outputs, &m_init_sc_inputs_glob, &m_init_sc_inputs_turbine,
+        &fi.num_pts_blade, &fi.num_pts_tower, fi.base_pos, &abort_lev,
+        &fi.dt_cfd, &fi.dt_fast, &m_inflow_type, &fi.num_blades,
+        &fi.num_blade_elem, &fi.num_tower_elem, &fi.chord_cluster_type,
+        &fi.to_cfd, &fi.from_cfd, &fi.to_sc, &fi.from_sc);
 #else
     fast_func(
-        FAST_OpFM_Init, &fi.tid_local, &fi.stop_time, inp_file, &fi.tid_global,
-        &m_num_sc_inputs, &m_num_sc_outputs, &fi.num_pts_blade,
-        &fi.num_pts_tower, fi.base_pos, &abort_lev, &fi.dt_fast, &fi.num_blades,
-        &fi.num_blade_elem, &fi.to_cfd, &fi.from_cfd, &fi.to_sc, &fi.from_sc);
+        FAST_ExtInfw_Init, &fi.tid_local, &fi.stop_time, inp_file,
+        &fi.tid_global, out_file, nullptr, &m_num_sc_inputs, &m_num_sc_outputs,
+        nullptr, nullptr, &fi.num_pts_blade, &fi.num_pts_tower, fi.base_pos,
+        &abort_lev, &fi.dt_cfd, &fi.dt_fast, &m_inflow_type, &fi.num_blades,
+        &fi.num_blade_elem, &fi.num_tower_elem, &fi.chord_cluster_type,
+        &fi.to_cfd, &fi.from_cfd, &fi.to_sc, &fi.from_sc);
 #endif
 
     {
@@ -284,13 +289,13 @@ void FastIface::fast_replay_turbine(FastTurbine& fi)
     // restart
     fi.time_index = 0;
     read_velocity_data(fi, ncf, 0);
-    fast_func(FAST_OpFM_Solution0, &fi.tid_local);
+    fast_func(FAST_CFD_Solution0, &fi.tid_local);
     fi.is_solution0 = false;
 
     for (int ic = 0; ic < num_cfd_steps; ++ic) {
         read_velocity_data(fi, ncf, ic);
         for (int i = 0; i < fi.num_substeps; ++i, ++fi.time_index) {
-            fast_func(FAST_OpFM_Step, &fi.tid_local);
+            fast_func(FAST_CFD_Step, &fi.tid_local);
         }
     }
     AMREX_ALWAYS_ASSERT(fi.time_index == num_steps);
@@ -317,9 +322,10 @@ void FastIface::fast_restart_turbine(FastTurbine& fi)
     copy_filename(fi.checkpoint_file, chkpt_file);
 
     fast_func(
-        FAST_OpFM_Restart, &fi.tid_local, chkpt_file, &abort_lev, &fi.dt_fast,
-        &fi.num_blades, &fi.num_blade_elem, &fi.time_index, &fi.to_cfd,
-        &fi.from_cfd, &fi.to_sc, &fi.from_sc);
+        FAST_ExtInfw_Restart, &fi.tid_local, chkpt_file, &abort_lev,
+        &fi.dt_fast, &m_inflow_type, &fi.num_blades, &fi.num_blade_elem,
+        &fi.num_tower_elem, &fi.time_index, &fi.to_cfd, &fi.from_cfd, &fi.to_sc,
+        &fi.from_sc);
 
     {
 #ifdef AMR_WIND_USE_OPENFAST

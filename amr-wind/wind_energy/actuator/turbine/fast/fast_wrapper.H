@@ -19,9 +19,9 @@ inline constexpr int fast_strlen() { return INTERFACE_STRING_LENGTH; }
 #define ErrID_Severe 3
 #define ErrID_Fatal 4
 
-struct OpFM_InputType
+struct ExtInfw_InputType_t
 {};
-struct OpFM_OutputType
+struct ExtInfw_OutputType_t
 {};
 
 #ifdef AMR_WIND_FAST_USE_SCDX
@@ -45,35 +45,36 @@ FAST_AllocateTurbines(int* /*unused*/, int* /*unused*/, char* /*unused*/)
 {}
 inline void FAST_DeallocateTurbines(int* /*unused*/, char* /*unused*/) {}
 inline void
-FAST_OpFM_Solution0(int* /*unused*/, int* /*unused*/, char* /*unused*/)
+FAST_CFD_Solution0(int* /*unused*/, int* /*unused*/, char* /*unused*/)
 {}
-inline void FAST_OpFM_Step(int* /*unused*/, int* /*unused*/, char* /*unused*/)
-{}
+inline void FAST_CFD_Step(int* /*unused*/, int* /*unused*/, char* /*unused*/) {}
 inline void FAST_CreateCheckpoint(
     int* /*unused*/, char* /*unused*/, int* /*unused*/, char* /*unused*/)
 {}
 
 // clang-format off
 #ifdef AMR_WIND_FAST_USE_SCDX
-inline void FAST_OpFM_Init(
-    int*, double*, const char*, int*, int*, int*, int*, float*,
-    float*, int*, int*, float*, int*, double*, int*, int*,
-    OpFM_InputType*, OpFM_OutputType*, SC_DX_InputType*,
-    SC_DX_OutputType*, int*, char*) {}
-
-inline void FAST_OpFM_Restart(
-    int*, char*, int*, double*, int*, int*, int*,
-    OpFM_InputType*, OpFM_OutputType*,
-    SC_DX_InputType*, SC_DX_OutputType*, int*, char*) {}
+inline void FAST_ExtInfw_Init(int *  , double * , const char * , int *  , char * ,
+                                        int *  , int *  , int *  , float *  , float *  ,
+                                        int *  , int *  , float *  , int * ,
+                                        double *  , double *  , int *  , int *  , int *  , int *  , int *  ,
+                                        ExtInfw_InputType_t*  , ExtInfw_OutputType_t*  , SC_InputType*  , SC_OutputType*  , 
+                                        int * , char * ) {}
+inline void FAST_ExtInfw_Restart(
+    int* , char* , int* , double* , int* , int* , int* , int* , int* ,
+    ExtInfw_InputType_t* , ExtInfw_OutputType_t* ,
+    SC_InputType* , SC_OutputType* , int* , char* ) {}
 #else
-inline void FAST_OpFM_Init(
-    int* /*unused*/, double* /*unused*/, const char* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/, float* /*unused*/,
-    int* /*unused*/, double* /*unused*/, int* /*unused*/, int* /*unused*/, OpFM_InputType* /*unused*/, OpFM_OutputType* /*unused*/,
-    SC_InputType* /*unused*/, SC_OutputType* /*unused*/, int* /*unused*/, char* /*unused*/) {}
+inline void FAST_ExtInfw_Init(int * /*unused*/ , double * /*unused*/, const char * /*unused*/, int * /*unused*/ , char * /*unused*/,
+                                        int * /*unused*/ , int * /*unused*/ , int * /*unused*/ , float * /*unused*/ , float * /*unused*/ ,
+                                        int * /*unused*/ , int * /*unused*/ , float * /*unused*/ , int * /*unused*/,
+                                        double * /*unused*/ , double * /*unused*/ , int * /*unused*/ , int * /*unused*/ , int * /*unused*/ , int * /*unused*/ , int * /*unused*/ ,
+                                        ExtInfw_InputType_t* /*unused*/ , ExtInfw_OutputType_t* /*unused*/ , SC_InputType* /*unused*/ , SC_OutputType* /*unused*/ , 
+                                        int * /*unused*/, char * /*unused*/) {}
 
-inline void FAST_OpFM_Restart(
-    int* /*unused*/, char* /*unused*/, int* /*unused*/, double* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/,
-    OpFM_InputType* /*unused*/, OpFM_OutputType* /*unused*/,
+inline void FAST_ExtInfw_Restart(
+    int* /*unused*/, char* /*unused*/, int* /*unused*/, double* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/, int* /*unused*/,
+    ExtInfw_InputType_t* /*unused*/, ExtInfw_OutputType_t* /*unused*/,
     SC_InputType* /*unused*/, SC_OutputType* /*unused*/, int* /*unused*/, char* /*unused*/) {}
 #endif
 // clang-format on
