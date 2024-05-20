@@ -57,6 +57,7 @@ void MMS::initialize_fields(int level, const amrex::Geometry& geom)
         velocity.boxArray(), velocity.distributionMap, velocity.nComp(),
         velocity.nGrow(), amrex::MFInfo().SetArena(amrex::The_Pinned_Arena()));
 
+    // this one
     for (amrex::MFIter mfi(h_density); mfi.isValid(); ++mfi) {
         const auto& vbx = mfi.validbox();
         const auto& vel = h_velocity.array(mfi);
