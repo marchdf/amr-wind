@@ -72,11 +72,6 @@ void Actuator::pre_init_actions()
         obj->read_inputs(inp);
         m_actuators.emplace_back(std::move(obj));
     }
-}
-
-void Actuator::post_init_actions()
-{
-    BL_PROFILE("amr-wind::actuator::Actuator::post_init_actions");
 
     amrex::Vector<int> act_proc_count(amrex::ParallelDescriptor::NProcs(), 0);
     for (auto& act : m_actuators) {
@@ -89,6 +84,11 @@ void Actuator::post_init_actions()
             std::accumulate(act_proc_count.begin(), act_proc_count.end(), 0);
         AMREX_ALWAYS_ASSERT(num_actuators() == nact);
     }
+}
+
+void Actuator::post_init_actions()
+{
+    BL_PROFILE("amr-wind::actuator::Actuator::post_init_actions");
 
     for (auto& act : m_actuators) {
         act->init_actuator_source();
