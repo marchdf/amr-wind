@@ -337,14 +337,21 @@ if(AMR_WIND_ENABLE_W2A)
   add_test_red(abl_w2a_terrain abl_bndry_output_native)
 endif()
 
-if(AMR_WIND_ENABLE_OPENFAST AND AMR_WIND_OPENFAST_VERSION VERSION_LESS "4")
+if(AMR_WIND_ENABLE_OPENFAST AND AMR_WIND_OPENFAST_VERSION VERSION_LESS "5")
   set(ACT_UNIFORM_ALM_TEST_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/test_files/act_uniform_alm)
   set(ACT_UNIFORM_ALM_TEST_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/test_files/act_uniform_alm)
   set(RTEST_ACT_UNIFORM_ALM_TEST_BINARY_DIR ${ACT_UNIFORM_ALM_TEST_BINARY_DIR}/r-test)
-  set(RTEST_TAG "v3.5.4")
+  if(AMR_WIND_OPENFAST_VERSION VERSION_GREATER_EQUAL "4")
+    set(RTEST_TAG "v4.0.0")
+    set(AERO_FILE NRELOffshrBsline5MW_Onshore_AeroDyn.dat)
+    set(OPENFAST_OPTIONS_PATCH_FILE custom_openfast4_options.patch)
+  else()
+    set(RTEST_TAG "v3.5.5")
+    set(AERO_FILE NRELOffshrBsline5MW_Onshore_AeroDyn15.dat)
+    set(OPENFAST_OPTIONS_PATCH_FILE custom_openfast_options.patch)
+  endif()
   set(5MW_BASELINE_DIR glue-codes/openfast/5MW_Baseline)
   set(5MW_LAND_DIR glue-codes/openfast-cpp/5MW_Land_DLL_WTurb_cpp)
-  set(AERO_FILE NRELOffshrBsline5MW_Onshore_AeroDyn15.dat)
   set(ELASTO_FILE NRELOffshrBsline5MW_Onshore_ElastoDyn.dat)
   set(SERVO_FILE NRELOffshrBsline5MW_Onshore_ServoDyn.dat)
   file(MAKE_DIRECTORY ${ACT_UNIFORM_ALM_TEST_BINARY_DIR})
@@ -370,7 +377,7 @@ if(AMR_WIND_ENABLE_OPENFAST AND AMR_WIND_OPENFAST_VERSION VERSION_LESS "4")
       "${RTEST_ACT_UNIFORM_ALM_TEST_BINARY_DIR}"
       COMMAND_ERROR_IS_FATAL ANY)
     execute_process(
-      COMMAND bash -c "${GIT_EXECUTABLE} apply ${ACT_UNIFORM_ALM_TEST_SOURCE_DIR}/custom_openfast_options.patch"
+      COMMAND bash -c "${GIT_EXECUTABLE} apply ${ACT_UNIFORM_ALM_TEST_SOURCE_DIR}/${OPENFAST_OPTIONS_PATCH_FILE}"
       WORKING_DIRECTORY
       "${RTEST_ACT_UNIFORM_ALM_TEST_BINARY_DIR}"
       COMMAND_ERROR_IS_FATAL ANY)
