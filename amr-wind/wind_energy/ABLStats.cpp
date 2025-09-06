@@ -313,7 +313,7 @@ void ABLStats::compute_zi()
                     }
                 }
 #ifdef AMREX_USE_SYCL
-                r = amrex::Gpu::blockReduceMax<nthreads>(r, gh);
+                r = amrex::Gpu::blockReduceMax(r, gh);
 #else
                 r = amrex::Gpu::blockReduceMax<nthreads>(r);
 #endif
