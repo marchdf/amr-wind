@@ -286,7 +286,7 @@ void ABLStats::compute_zi()
         constexpr std::size_t shared_mem_bytes =
                       sizeof(unsigned long long)*amrex::Gpu::Device::warp_size;
         amrex::launch<nthreads>(
-            nblocks, shared_mem_bytes amrex::Gpu::gpuStream(),
+            nblocks, shared_mem_bytes, amrex::Gpu::gpuStream(),
             [=] AMREX_GPU_DEVICE (amrex::Gpu::Handler const& gh) {
                 amrex::Dim1 blockIdx {gh.blockIdx()};
                 amrex::Dim1 threadIdx{gh.threadIdx()};
