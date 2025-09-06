@@ -277,15 +277,23 @@ void ABLStats::compute_zi()
             }
         }
         int lendir = domain_box.length(dir);
-        // xxxxx TODO: sycl can be supported in the future.
-        // xxxxx TODO: we can support CPU later.
         const int nblocks = box2d.numPts();
         constexpr int nthreads = 128;
         amrex::BoxIndexerND<2> box_indexer(box2d);
         amrex::Gpu::DeviceVector<int> tmp(nblocks);
         auto* ptmp = tmp.data();
+#ifdef AMREX_USE_SYCL
+        constexpr std::size_t shared_mem_bytes =
+                      sizeof(unsigned long long)*amrex::Gpu::Device::warp_size;
         amrex::launch<nthreads>(
-            nblocks, amrex::Gpu::gpuStream(), [=] AMREX_GPU_DEVICE() {
+            nblocks, shared_mem_bytes amrex::Gpu::gpuStream(),
+            [=] AMREX_GPU_DEVICE (amrex::Gpu::Handler const& gh) {
+                amrex::Dim1 blockIdx {gh.blockIdx()};
+                amrex::Dim1 threadIdx{gh.threadIdx()};
+#else
+        amrex::launch<nthreads>(
+            nblocks, amrex::Gpu::gpuStream(), [=] AMREX_GPU_DEVICE () {
+#endif
                 auto iv2d = box_indexer.intVect(blockIdx.x);
                 amrex::IntVect iv;
                 int i2d = 0;
@@ -304,7 +312,11 @@ void ABLStats::compute_zi()
                         r.second() = k;
                     }
                 }
+#ifdef AMREX_USE_SYCL
+                r = amrex::Gpu::blockReduceMax<nthreads>(r, gh);
+#else
                 r = amrex::Gpu::blockReduceMax<nthreads>(r);
+#endif
                 if (threadIdx.x == 0) {
                     ptmp[blockIdx.x] = r.second();
                 }
@@ -316,6 +328,60 @@ void ABLStats::compute_zi()
                 return (ptmp[iblock] + amrex::Real(0.5)) * dnval;
             });
 #else
+        auto alo = amrex::lbound(fabbox);
+        auto ahi = amrex::ubound(fabbox);
+        if (dir == 0) {
+#ifdef AMREX_USE_OMP
+#pragma omp parallel for collapse(2) reduction(+:zi_sum)
+#endif
+            for         (int k = alo.z; k <= ahi.z; ++k) {
+                for     (int j = alo.y; j <= ahi.y; ++j) {
+                    amrex::Real vmax = std::numeric_limits<amrex::Real>::lowest();
+                    int idxmax = 0;
+                    for (int i = alo.x; i <= ahi.x; ++i) {
+                        if (a(i,j,k) > vmax) {
+                            vmax = a(i,j,k);
+                            idxmax = i;
+                        }
+                    }
+                    zi_sum += (idxmax + amrex::Real(0.5)) * m_dn;
+                }
+            }
+        } else if (dir == 1) {
+#ifdef AMREX_USE_OMP
+#pragma omp parallel for collapse(2) reduction(+:zi_sum)
+#endif
+            for         (int k = alo.z; k <= ahi.z; ++k) {
+                for     (int i = alo.x; i <= ahi.x; ++i) {
+                    amrex::Real vmax = std::numeric_limits<amrex::Real>::lowest();
+                    int idxmax = 0;
+                    for (int j = alo.y; j <= ahi.y; ++j) {
+                        if (a(i,j,k) > vmax) {
+                            vmax = a(i,j,k);
+                            idxmax = i;
+                        }
+                    }
+                    zi_sum += (idxmax + amrex::Real(0.5)) * m_dn;
+                }
+            }
+        } else {
+#ifdef AMREX_USE_OMP
+#pragma omp parallel for collapse(2) reduction(+:zi_sum)
+#endif
+            for         (int j = alo.y; j <= ahi.y; ++j) {
+                for     (int i = alo.x; i <= ahi.x; ++i) {
+                    amrex::Real vmax = std::numeric_limits<amrex::Real>::lowest();
+                    int idxmax = 0;
+                    for (int k = alo.z; k <= ahi.z; ++k) {
+                        if (a(i,j,k) > vmax) {
+                            vmax = a(i,j,k);
+                            idxmax = i;
+                        }
+                    }
+                    zi_sum += (idxmax + amrex::Real(0.5)) * m_dn;
+                }
+            }
+        }
 #endif
     }
 
